@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": false,
+    "module": "CommonJS",
+    "target": "ES5",
+    "esModuleInterop": true
+  },
+  "include": ["**/*.ts", "example/index.js"]
+}
