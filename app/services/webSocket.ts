@@ -2,33 +2,33 @@ import WebSocket from "ws";
 // import { socketMessCtr } from "../controllers";
 import { DefaultConfig } from "../../config";
 
-let webSocket: WebSocket | undefined;
+let wss: WebSocket.Server = new WebSocket.Server({
+  port: DefaultConfig.WS_PORT as number,
+});
 
-export const initSocket = () => {
-  const wss = new WebSocket.Server({
-    port: DefaultConfig.WS_PORT as number,
-  });
-
-  wss.on("open", () => {
-    console.error("socket serve run success!");
-  });
+export const initSocket = async () => {
+  wss.addListener("listening", (...args) => {});
 
   wss.on("connection", (socket, request) => {
-    webSocket = socket;
     socket.send("connection success !");
-
-    socket.on("message", (msg) => {
+    wss.on("message", (msg) => {
       try {
         msg = JSON.parse(msg.toString());
-        console.log(msg);
       } catch (error) {
         throw new Error(error as string);
       }
       //TODO
     });
+    return socket;
   });
 
+  wss.on("open", (...args) => {});
+
   wss.on("close", () => {});
+
+  wss.on("error", (error) => {
+    throw new Error("socket连接错误");
+  });
 };
 
-export default webSocket;
+export default wss;
